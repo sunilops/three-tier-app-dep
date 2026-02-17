@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sunil Kumar Panda | Flask DevOps App 🚀</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+            color: #ccc;
+        }
+
+        .messages {
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .messages p {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .messages p:hover {
+            background: rgba(0,198,255,0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px #00c6ff;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            color: white;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00c6ff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        @media(max-width:600px){
+            .container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Sunil Kumar Panda 🚀</h1>
+    <div class="subtitle">
+        Flask + MySQL | DevOps Powered 2-Tier Application
+    </div>
+
+    <div class="messages">
+        {% for message in messages %}
+            <p>{{ message[0] }}</p>
+        {% endfor %}
+    </div>
+
+    <form id="messageForm">
+        <div class="input-group">
+            <input type="text" name="new_message" placeholder="Enter your message..." required>
+            <button type="submit">Send</button>
+        </div>
+    </form>
+
+    <footer>
+        Built with ❤️ by Sunil Kumar Panda | Docker • Jenkins • AWS
+    </footer>
+</div>
+
+<script>
+    document.getElementById("messageForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const input = document.querySelector("input[name='new_message']");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        fetch("/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({ new_message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                const p = document.createElement("p");
+                p.textContent = data.message;
+                document.querySelector(".messages").appendChild(p);
+                input.value = "";
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+
+</body>
+</html>
